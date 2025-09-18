@@ -117,7 +117,7 @@ const Hero = () => {
           </div>
         </div>
       </div>
-
+g
       {/* About Us Section */}
       <div className="mt-14">
         <h1 className="text-4xl font-bold text-center">About US</h1>
