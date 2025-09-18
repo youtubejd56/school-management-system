@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -13,7 +15,7 @@
     "@heroicons/react": "^2.2.0",
     "@tailwindcss/line-clamp": "^0.4.4",
     "@tailwindcss/vite": "^4.0.6",
-    "axios": "^1.10.0",
+    "axios": "^1.12.2",
     "file-saver": "^2.0.5",
     "framer-motion": "^12.6.3",
     "jspdf": "^3.0.1",
@@ -29,6 +31,7 @@
     "recharts": "^3.1.0",
     "swiper": "^11.2.10",
     "tailwindcss": "^4.0.6",
+    "vite-plugin-pwa": "^1.0.3",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
