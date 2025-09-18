@@ -21,7 +21,7 @@ export default defineConfig({
         icons: [
           {
             src: '/mobile.png',  // must be in public/
-            sizes: '192x192',
+            sizes: '128x128',
             type: 'image/png'
           },
           {
