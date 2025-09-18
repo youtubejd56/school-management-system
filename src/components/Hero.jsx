@@ -106,7 +106,7 @@ const Hero = () => {
           <div className="relative w-full max-w-[1600px] rounded-2xl border-[6px] border-indigo-500 shadow-[0_10px_40px_rgba(0,0,0,0.3)] overflow-hidden">
             <video
               className="w-full h-[500px] md:h-[600px] lg:h-[700px] xl:h-[800px] object-cover"
-              src="/videos/intro.mp4"
+              src="./public/videos/intro.mp4"
               autoPlay
               muted
               loop
