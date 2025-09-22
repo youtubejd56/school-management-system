@@ -30,14 +30,14 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="flex min-h-screen">
-      {/* Left Illustration */}
-      <div className="w-1/2 bg-indigo-100 flex items-center justify-center">
-        <img src={Images10} alt="Admin Login Illustration" className="w-6/2 md:w-3/5" />
+    <div className="flex min-h-screen flex-col md:flex-row">
+      {/* Left Illustration - hidden on mobile */}
+      <div className="hidden md:flex w-1/2 bg-indigo-100 items-center justify-center">
+        <img src={Images10} alt="Admin Login Illustration" className="w-3/5" />
       </div>
 
       {/* Right Section */}
-      <div className="w-1/2 flex items-center justify-center bg-white">
+      <div className="flex-1 flex items-center justify-center bg-white">
         <div className="w-full max-w-md p-8">
           <h2 className="text-3xl font-bold text-blue-900 mb-6 text-center">Admin Login</h2>
 

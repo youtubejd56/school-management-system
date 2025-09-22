@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import Images1 from "../assets/images4.png";
+import Images1 from "../assets/images4.PNG";
 import Images2 from "../assets/Images_side_views.PNG";
 import Images3 from "../assets/images_side.jpg";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -56,7 +56,7 @@ const Hero = () => {
   return (
     <>
       {/* Swiper Section */}
-      <div className="bg-gray-500">
+      <div className="bg-gray-400">
         <div className="mx-auto w-full relative">
           <Swiper
             spaceBetween={30}
@@ -92,7 +92,7 @@ const Hero = () => {
           </Swiper>
         </div>
         {/* Backdrop blur bar */}
-        <div className="wrapper w-full h-8 bg-gray-400/20 bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 absolute -bottom-12" />
+        <div className="wrapper w-full h-8 bg-blue-400/20 bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 -mt-4 md:-mt-4  absolute" />
       </div>
 
       {/* Malayalam Introduction */}

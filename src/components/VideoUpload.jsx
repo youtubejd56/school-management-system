@@ -43,12 +43,12 @@ const VideoUpload = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-6 flex flex-col items-center">
       <div className="w-full max-w-6xl flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-semibold text-gray-800">
+        <h2 className="text-xl md:text-2xl font-semibold text-gray-800">
           Uploaded Short Videos 🎬
         </h2>
         <button
           onClick={() => navigate("/shorts")}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          className="px-3 py-2 md:px-4 md:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
         >
           ← Back to Upload
         </button>

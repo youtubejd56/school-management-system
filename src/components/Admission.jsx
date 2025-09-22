@@ -44,75 +44,75 @@ const Admission = () => {
   const handleGoBack = () => navigate(-1);
 
   return (
-    <div className="w-full bg-grey-500">
-      <div className="container mx-auto py-8">
-        <div className="w-96 mx-auto bg-gray-100 rounded shadow">
-          <div className="mx-16 py-4 px-8 text-black text-xl font-bold border-b border-grey-500">
-            Student Application
+    <div className=" bg-white md:bg-gray-50 flex items-center justify-center p-2">
+      <div className="w-full max-w-md md:bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="text-center py-4 px-6 text-black text-xl sm:text-2xl font-bold border-b border-gray-300">
+          Student Application
+        </div>
+
+        <form onSubmit={handleSubmit} className="px-6 py-6 space-y-4">
+          <div>
+            <label className="block text-gray-700 text-sm sm:text-base font-semibold mb-1">
+              Phone Number
+            </label>
+            <input
+              type="text"
+              name="phone_num"
+              value={formData.phone_num}
+              onChange={handleChange}
+              placeholder="Enter your Number"
+              required
+              className="border rounded w-full py-2 px-3 sm:px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
           </div>
 
-          <form onSubmit={handleSubmit} className="px-8 py-4">
-            <div className="mb-4">
-              <label className="block text-grey-darker text-sm font-bold mb-2">
-                Phone Number
-              </label>
-              <input
-                type="text"
-                name="phone_num"
-                value={formData.phone_num}
-                onChange={handleChange}
-                placeholder="Enter your Number"
-                required
-                className="border rounded w-full py-2 px-3 text-grey-darker"
-              />
-            </div>
+          <div>
+            <label className="block text-gray-700 text-sm sm:text-base font-semibold mb-1">
+              Student Name
+            </label>
+            <input
+              type="text"
+              name="student_name"
+              value={formData.student_name}
+              onChange={handleChange}
+              placeholder="Enter your Name"
+              required
+              className="border rounded w-full py-2 px-3 sm:px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
 
-            <div className="mb-4">
-              <label className="block text-grey-darker text-sm font-bold mb-2">
-                Student Name
-              </label>
-              <input
-                type="text"
-                name="student_name"
-                value={formData.student_name}
-                onChange={handleChange}
-                placeholder="Enter your Name"
-                required
-                className="border rounded w-full py-2 px-3 text-grey-darker"
-              />
-            </div>
+          <div>
+            <label className="block text-gray-700 text-sm sm:text-base font-semibold mb-1">
+              Address
+            </label>
+            <input
+              type="text"
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+              placeholder="Enter your Address"
+              required
+              className="border rounded w-full py-2 px-3 sm:px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
 
-            <div className="mb-4">
-              <label className="block text-grey-darker text-sm font-bold mb-2">
-                Address
-              </label>
-              <input
-                type="text"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-                placeholder="Enter your Address"
-                required
-                className="border rounded w-full py-2 px-3 text-grey-darker"
-              />
-            </div>
-
+          <div className="flex flex-col sm:flex-row gap-3 mt-4">
             <button
               type="submit"
-              className="bg-green-500 py-2 px-5 text-white font-semibold hover:bg-blue-500"
+              className="flex-1 bg-green-500 py-2 px-4 text-white font-semibold rounded hover:bg-blue-500 transition"
             >
               Submit
             </button>
 
             <button
               type="button"
-              className="ml-3 px-5 py-2 text-white font-semibold bg-cyan-700 hover:bg-red-500"
               onClick={handleGoBack}
+              className="flex-1 bg-cyan-700 py-2 px-4 text-white font-semibold rounded hover:bg-red-500 transition"
             >
               Go Back
             </button>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
     </div>
   );

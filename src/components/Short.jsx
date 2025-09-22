@@ -183,7 +183,7 @@ const Short = () => {
             <button
               type="button"
               onClick={handleRemoveVideo}
-              className="px-5 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
+              className="px-2 py-1 md:px-5 md:py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
             >
               Cancel
             </button>
@@ -191,14 +191,14 @@ const Short = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                className="px-2 py-1 md:px-5 md:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
               >
                 {loading ? "Uploading..." : "Upload"}
               </button>
               <button
                 type="button"
                 onClick={() => navigate("/videos")}
-                className="px-5 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                className="px-2 py-1 md:px-5 md:py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
               >
                 View Uploaded Videos
               </button>
