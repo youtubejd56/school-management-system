@@ -1,1 +1,1 @@
-if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/school-management-system/sw.js', { scope: '/school-management-system/' })})}
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/school-management-system/manifest.json', { scope: '/school-management-system/' })})}
