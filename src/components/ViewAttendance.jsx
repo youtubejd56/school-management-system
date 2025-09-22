@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
-const API_URL = "http://127.0.0.1:8000/api/attendance/";
+// ✅ Use environment variable instead of hardcoding localhost
+const API_URL = import.meta.env.VITE_API_BASE_URL + "/attendance/";
 
 const ViewAttendance = () => {
   const [records, setRecords] = useState([]);
@@ -49,7 +50,9 @@ const ViewAttendance = () => {
 
     if (selectedMonth) {
       filtered = filtered.filter((rec) => {
-        const month = new Date(rec.date).toLocaleString("default", { month: "long" });
+        const month = new Date(rec.date).toLocaleString("default", {
+          month: "long",
+        });
         return month === selectedMonth;
       });
     }
@@ -95,9 +98,13 @@ const ViewAttendance = () => {
 
   const divisions = ["10A", "10B", "9A", "9B", "8A", "8B"];
   const years = [...new Set(records.map((rec) => rec.year))];
-  const months = [...new Set(records.map((rec) =>
-    new Date(rec.date).toLocaleString("default", { month: "long" })
-  ))];
+  const months = [
+    ...new Set(
+      records.map((rec) =>
+        new Date(rec.date).toLocaleString("default", { month: "long" })
+      )
+    ),
+  ];
   const dates = [...new Set(records.map((rec) => rec.date))];
 
   return (

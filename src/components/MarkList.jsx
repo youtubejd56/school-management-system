@@ -1,3 +1,4 @@
+// MarkList.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -17,12 +18,18 @@ const SUBJECTS = [
 ];
 
 const DIVISIONS = ["10A", "10B", "9A", "9B", "8A", "8B"];
-const EXAM_TYPES = ["First Term", "Second Term", "Annual Exam"]; // ✅ new
-const BASE_URL = "http://localhost:8000/api";
+const EXAM_TYPES = ["First Term", "Second Term", "Annual Exam"];
+
+// ✅ Auto-switch API base URL
+const BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  (window.location.hostname === "localhost"
+    ? "http://127.0.0.1:8000/api"
+    : "https://<your-render-backend>.onrender.com/api"); // 🔗 replace with Render URL
 
 export default function MarkList() {
   const [selectedDivision, setSelectedDivision] = useState(DIVISIONS[0]);
-  const [selectedExam, setSelectedExam] = useState(EXAM_TYPES[0]); // ✅ default exam
+  const [selectedExam, setSelectedExam] = useState(EXAM_TYPES[0]);
   const [year, setYear] = useState(new Date().getFullYear());
   const [rollNo, setRollNo] = useState("");
   const [studentName, setStudentName] = useState("");
@@ -30,10 +37,22 @@ export default function MarkList() {
   const [savedMarks, setSavedMarks] = useState({});
   const navigate = useNavigate();
 
-  // Fetch marks for selected division + exam + year
+  // 📌 Axios instance (with timeout + tokens)
+  const api = axios.create({
+    baseURL: BASE_URL,
+    timeout: 10000,
+  });
+
+  api.interceptors.request.use((config) => {
+    const access = localStorage.getItem("access");
+    if (access) config.headers.Authorization = `Bearer ${access}`;
+    return config;
+  });
+
+  // fetch marks
   const fetchDivisionMarks = (division, year, exam) => {
-    axios
-      .get(`${BASE_URL}/marks/?division=${division}&year=${year}&exam=${exam}`)
+    api
+      .get(`/marks/?division=${division}&year=${year}&exam=${exam}`)
       .then((res) => {
         const sortedData = res.data.sort(
           (a, b) => parseInt(a.roll_no) - parseInt(b.roll_no)
@@ -56,7 +75,7 @@ export default function MarkList() {
     fetchDivisionMarks(selectedDivision, year, selectedExam);
   }, [selectedDivision, year, selectedExam]);
 
-  // Save marks
+  // save marks
   const handleSave = () => {
     if (!studentName) return alert("Please enter student name");
     if (!rollNo) return alert("Please enter roll number");
@@ -76,12 +95,12 @@ export default function MarkList() {
       roll_no: rollNo,
       student_name: studentName,
       year: year,
-      exam: selectedExam, // ✅ send exam type
+      exam: selectedExam,
       ...marks,
     };
 
-    axios
-      .post(`${BASE_URL}/marks/`, payload)
+    api
+      .post("/marks/", payload)
       .then(() => {
         fetchDivisionMarks(selectedDivision, year, selectedExam);
         setRollNo("");
@@ -94,16 +113,16 @@ export default function MarkList() {
       });
   };
 
-  // Clear single division/year/exam
+  // clear division
   const handleClearDivision = () => {
     if (
       window.confirm(
         `Are you sure you want to clear all marks for ${selectedDivision} (${selectedExam}, ${year})?`
       )
     ) {
-      axios
+      api
         .delete(
-          `${BASE_URL}/marks/clear_division/${selectedDivision}/?year=${year}&exam=${selectedExam}`
+          `/marks/clear_division/${selectedDivision}/?year=${year}&exam=${selectedExam}`
         )
         .then(() => {
           setSavedMarks((prev) => ({
@@ -118,13 +137,11 @@ export default function MarkList() {
     }
   };
 
-  // Clear all
+  // clear all
   const handleClearAll = () => {
-    if (
-      window.confirm("Are you sure you want to clear ALL marks for all divisions?")
-    ) {
-      axios
-        .delete(`${BASE_URL}/marks/clear_all/`)
+    if (window.confirm("Are you sure you want to clear ALL marks for all divisions?")) {
+      api
+        .delete("/marks/clear_all/")
         .then(() => setSavedMarks({}))
         .catch((err) => {
           console.error("Failed to clear all marks", err);
@@ -145,7 +162,7 @@ export default function MarkList() {
 
   return (
     <div className="flex gap-5 p-5">
-      {/* Left menu */}
+      {/* Left Menu */}
       <div className="min-w-[150px] border border-gray-300 p-2.5 rounded-md">
         <h3 className="text-lg font-semibold mb-3">Divisions</h3>
         {DIVISIONS.map((div) => (
@@ -319,10 +336,7 @@ export default function MarkList() {
                         {item.student_name}
                       </td>
                       {SUBJECTS.map((subj) => (
-                        <td
-                          key={subj}
-                          className="px-4 py-2 text-center"
-                        >
+                        <td key={subj} className="px-4 py-2 text-center">
                           {item[subj] ?? ""}
                         </td>
                       ))}

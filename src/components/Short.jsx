@@ -3,7 +3,11 @@ import { Upload, X } from "lucide-react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const API_URL = "http://127.0.0.1:8000/api/shorts/";
+// ✅ Use environment variables for API
+const isDevelopment = import.meta.env.MODE === "development";
+const API_URL = isDevelopment
+  ? import.meta.env.VITE_API_BASE_URL_LOCAL + "/api/shorts/"
+  : import.meta.env.VITE_API_BASE_URL_DEPLOY + "/api/shorts/";
 
 const Short = () => {
   const [video, setVideo] = useState(null);
@@ -141,9 +145,7 @@ const Short = () => {
         {/* Form */}
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <div>
-            <label className="block text-gray-700 font-medium mb-1">
-              Title
-            </label>
+            <label className="block text-gray-700 font-medium mb-1">Title</label>
             <input
               type="text"
               value={title}

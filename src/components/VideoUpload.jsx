@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const API_URL = "http://127.0.0.1:8000/api/shorts/";
+// ✅ Use environment variable or fallback
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
+const API_URL = `${API_BASE}/api/shorts/`;
 
 const VideoUpload = () => {
   const [videos, setVideos] = useState([]);
@@ -31,7 +33,7 @@ const VideoUpload = () => {
 
     try {
       await axios.delete(`${API_URL}${id}/`);
-      setVideos(videos.filter((video) => video.id !== id)); // Update UI
+      setVideos((prev) => prev.filter((video) => video.id !== id));
     } catch (err) {
       console.error("❌ Failed to delete video:", err);
       alert("Failed to delete video!");
@@ -59,8 +61,8 @@ const VideoUpload = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
           {videos.map((video) => {
-            console.log("🎥 Video object:", video); // Debug: see the full object
-            const isValidDate = video.created_at && !isNaN(Date.parse(video.created_at));
+            const isValidDate =
+              video.created_at && !isNaN(Date.parse(video.created_at));
 
             return (
               <div
@@ -71,7 +73,7 @@ const VideoUpload = () => {
                   src={
                     video.video.startsWith("http")
                       ? video.video
-                      : `http://127.0.0.1:8000${video.video}`
+                      : `${API_BASE}${video.video}`
                   }
                   controls
                   className="rounded-lg w-full max-h-60 object-cover"
@@ -81,7 +83,6 @@ const VideoUpload = () => {
                 </h3>
                 <p className="text-gray-600 text-sm">{video.caption}</p>
 
-                {/* Safe date rendering with raw fallback for debugging */}
                 <p className="text-gray-400 text-xs mt-2">
                   {isValidDate ? (
                     <>Uploaded on {new Date(video.created_at).toLocaleString()}</>
@@ -92,7 +93,6 @@ const VideoUpload = () => {
                   )}
                 </p>
 
-                {/* Large Delete Button */}
                 <div className="mt-4 flex justify-end">
                   <button
                     onClick={() => handleDelete(video.id)}

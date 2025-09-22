@@ -1,8 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
-import * as XLSX from 'xlsx';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import * as XLSX from "xlsx";
+
+// ✅ Centralized API base (works in dev + prod)
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
+const API_URL = `${API_BASE}/api/admissiondata/`;
 
 const AdmissionData = () => {
   const [admissions, setAdmissions] = useState([]);
@@ -14,10 +18,10 @@ const AdmissionData = () => {
 
   const fetchAdmissions = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/admissiondata/");
+      const response = await axios.get(API_URL);
       setAdmissions(response.data);
     } catch (error) {
-      console.error("Error fetching admission data:", error);
+      console.error("❌ Error fetching admission data:", error);
     }
   };
 
@@ -58,7 +62,7 @@ const AdmissionData = () => {
     const doc = new jsPDF();
     doc.text("Admission Data", 14, 10);
     autoTable(doc, {
-      head: [['Name', 'Phone', 'Address', 'Year', 'Month', 'Date']],
+      head: [["Name", "Phone", "Address", "Year", "Month", "Date"]],
       body: filteredAdmissions.map((ad) => [
         ad.student_name,
         ad.phone_num,
@@ -117,7 +121,9 @@ const AdmissionData = () => {
         >
           <option value="">All Years</option>
           {years.map((y) => (
-            <option key={y} value={y}>{y}</option>
+            <option key={y} value={y}>
+              {y}
+            </option>
           ))}
         </select>
 
@@ -128,7 +134,9 @@ const AdmissionData = () => {
         >
           <option value="">All Months</option>
           {months.map((m) => (
-            <option key={m} value={m}>{m}</option>
+            <option key={m} value={m}>
+              {m}
+            </option>
           ))}
         </select>
 
@@ -139,7 +147,9 @@ const AdmissionData = () => {
         >
           <option value="">All Dates</option>
           {dates.map((d) => (
-            <option key={d} value={d}>{d}</option>
+            <option key={d} value={d}>
+              {d}
+            </option>
           ))}
         </select>
       </div>

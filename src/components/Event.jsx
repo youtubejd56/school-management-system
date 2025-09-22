@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const API_BASE = 'http://localhost:8000'; // Update when deployed
+// ✅ Use environment variables (set in Vite)
+const isDevelopment = import.meta.env.MODE === 'development';
+const API_BASE = isDevelopment
+  ? import.meta.env.VITE_API_BASE_URL_LOCAL // e.g. "http://localhost:8000"
+  : import.meta.env.VITE_API_BASE_URL_DEPLOY; // e.g. "https://your-backend.onrender.com"
 
 const Event = () => {
   const [file, setFile] = useState(null);
@@ -10,13 +14,17 @@ const Event = () => {
   const [showModal, setShowModal] = useState(false);
   const [wordCount, setWordCount] = useState(0);
 
+  // ✅ Load posts from backend
   useEffect(() => {
-    axios.get(`${API_BASE}/api/posts/`)
+    axios
+      .get(`${API_BASE}/api/posts/`)
       .then((res) => {
-        const formattedPosts = res.data.map(post => ({
+        const formattedPosts = res.data.map((post) => ({
           ...post,
           file: post.file
-            ? (post.file.startsWith('http') ? post.file : `${API_BASE.replace(/\/$/, '')}${post.file}`)
+            ? post.file.startsWith('http')
+              ? post.file
+              : `${API_BASE.replace(/\/$/, '')}${post.file}`
             : null,
         }));
         setPosts(formattedPosts);
@@ -24,18 +32,12 @@ const Event = () => {
       .catch((err) => console.error('Failed to load posts:', err));
   }, []);
 
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-  };
-
-  const removeFile = () => {
-    setFile(null);
-  };
+  const handleFileChange = (e) => setFile(e.target.files[0]);
+  const removeFile = () => setFile(null);
 
   const handleDescriptionChange = (e) => {
     const text = e.target.value;
     const words = text.trim() ? text.trim().split(/\s+/) : [];
-
     setDescription(text);
     setWordCount(words.length);
   };
@@ -45,7 +47,6 @@ const Event = () => {
       alert('Please add a file or description.');
       return;
     }
-
     if (wordCount > 20) {
       alert('Caption cannot exceed 20 words.');
       return;
@@ -63,9 +64,9 @@ const Event = () => {
       const newPost = {
         ...response.data,
         file: response.data.file
-          ? (response.data.file.startsWith('http')
+          ? response.data.file.startsWith('http')
             ? response.data.file
-            : `${API_BASE}${response.data.file.startsWith('/') ? '' : '/'}${response.data.file}`)
+            : `${API_BASE}${response.data.file.startsWith('/') ? '' : '/'}${response.data.file}`
           : null,
       };
 
@@ -109,10 +110,7 @@ const Event = () => {
               {post.file && (
                 <div className="w-full max-h-60 flex items-center justify-center overflow-hidden rounded-lg mb-3 bg-gray-100">
                   {post.file.endsWith('.mp4') || post.file.endsWith('.webm') ? (
-                    <video
-                      controls
-                      className="max-h-60 w-auto object-contain rounded"
-                    >
+                    <video controls className="max-h-60 w-auto object-contain rounded">
                       <source src={post.file} type="video/mp4" />
                       Your browser does not support the video tag.
                     </video>
@@ -159,6 +157,7 @@ const Event = () => {
               &times;
             </button>
 
+            {/* Preview image */}
             {file && file.type.startsWith('image/') && (
               <div className="relative mb-4">
                 <img
@@ -175,6 +174,7 @@ const Event = () => {
               </div>
             )}
 
+            {/* Preview video */}
             {file && file.type.startsWith('video/') && (
               <div className="relative mb-4">
                 <video
@@ -191,6 +191,7 @@ const Event = () => {
               </div>
             )}
 
+            {/* File input */}
             <div className="border-2 border-dashed border-gray-300 p-4 text-center rounded-lg mb-4">
               <input
                 type="file"
@@ -204,6 +205,7 @@ const Event = () => {
               </label>
             </div>
 
+            {/* Caption */}
             <textarea
               value={description}
               onChange={handleDescriptionChange}
@@ -214,19 +216,20 @@ const Event = () => {
             ></textarea>
 
             {/* Word counter */}
-            <p className={`text-xs mb-4 text-right ${
-              wordCount > 20 ? 'text-red-500' : 'text-gray-500'
-            }`}>
+            <p
+              className={`text-xs mb-4 text-right ${
+                wordCount > 20 ? 'text-red-500' : 'text-gray-500'
+              }`}
+            >
               {wordCount}/20 words
             </p>
 
+            {/* Upload button */}
             <button
               onClick={handlePost}
               disabled={wordCount > 20}
               className={`w-full py-2 rounded text-white ${
-                wordCount > 20
-                  ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-green-700 hover:bg-green-500'
+                wordCount > 20 ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-700 hover:bg-green-500'
               }`}
             >
               Upload Post

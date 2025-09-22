@@ -1,17 +1,21 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
+// ✅ Use env variable for API base
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
+const API_URL = `${API_BASE}/api/admission/`;
 
 const Admission = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    phone_num: '',
-    student_name: '',
-    address: '',
+    phone_num: "",
+    student_name: "",
+    address: "",
   });
 
   const handleChange = (e) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
@@ -21,20 +25,19 @@ const Admission = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:8000/api/admission/', formData);
-      alert('Submitted Successfully!');
+      const response = await axios.post(API_URL, formData);
+      alert("✅ Submitted Successfully!");
       console.log(response.data);
 
-      // ✅ Reset form after submission
+      // Reset form after submission
       setFormData({
-        phone_num: '',
-        student_name: '',
-        address: '',
+        phone_num: "",
+        student_name: "",
+        address: "",
       });
-
     } catch (error) {
-      console.error('Error submitting admission form:', error);
-      alert('Submission failed!');
+      console.error("❌ Error submitting admission form:", error);
+      alert("Submission failed! Please try again.");
     }
   };
 
@@ -50,7 +53,9 @@ const Admission = () => {
 
           <form onSubmit={handleSubmit} className="px-8 py-4">
             <div className="mb-4">
-              <label className="block text-grey-darker text-sm font-bold mb-2">Phone Number</label>
+              <label className="block text-grey-darker text-sm font-bold mb-2">
+                Phone Number
+              </label>
               <input
                 type="text"
                 name="phone_num"
@@ -63,7 +68,9 @@ const Admission = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-grey-darker text-sm font-bold mb-2">Student Name</label>
+              <label className="block text-grey-darker text-sm font-bold mb-2">
+                Student Name
+              </label>
               <input
                 type="text"
                 name="student_name"
@@ -76,7 +83,9 @@ const Admission = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-grey-darker text-sm font-bold mb-2">Address</label>
+              <label className="block text-grey-darker text-sm font-bold mb-2">
+                Address
+              </label>
               <input
                 type="text"
                 name="address"

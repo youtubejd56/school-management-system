@@ -3,6 +3,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Send, Bot, X } from "lucide-react";
 import axios from "axios";
 
+const API_BASE =
+  import.meta.env.VITE_API_BASE_URL || "https://sms-backend-3n8z.onrender.com/api";
+
 const SupportBot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
@@ -18,16 +21,15 @@ const SupportBot = () => {
     scrollToBottom();
   }, [messages]);
 
-  // ✅ Predefined answers (keys are lowercase)
+  // ✅ Predefined answers
   const predefinedAnswers = {
     "who developed this website": "👨‍💻 This website was developed by Vinayak NV.",
-    "who made this website": "👨‍💻 This website was developed by Vinayak NV.", 
+    "who made this website": "👨‍💻 This website was developed by Vinayak NV.",
     "who created this website": "👨‍💻 This website was developed by Vinayak NV.",
     "who developed ai chatbot":
       "🤖 The AI chatbot was created and integrated by Vinayak NV.",
     "who created ai chatbot": "🤖 The AI chatbot was created by Vinayak NV.",
     "who made this project": "🚀 This project was fully developed by Vinayak NV.",
-    // clickable phone + portfolio link. Uses tel: for phone and opens portfolio in a new tab.
     "contact developer":
       '📞 <a href="tel:8075631073">8075631073</a> <br/> 🌐 <a href="https://youtubejd56.github.io/vinayak-portfolio/" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline">Portfolio Link</a>',
   };
@@ -36,7 +38,7 @@ const SupportBot = () => {
     const trimmedInput = input.trim();
     if (!trimmedInput) return;
 
-    // Add user message instantly (plain text)
+    // Add user message instantly
     setMessages((prev) => [
       ...prev,
       { role: "user", content: trimmedInput, isHtml: false },
@@ -46,10 +48,9 @@ const SupportBot = () => {
 
     const lowerInput = trimmedInput.toLowerCase();
 
-    // ✅ Check predefined answers first
+    // ✅ Predefined answers
     if (predefinedAnswers[lowerInput]) {
       const answer = predefinedAnswers[lowerInput];
-      // mark as HTML if answer contains tags (safe because we control these strings)
       const isHtml = /<[^>]+>/.test(answer);
       setMessages((prev) => [
         ...prev,
@@ -60,12 +61,11 @@ const SupportBot = () => {
     }
 
     try {
-      // Otherwise, call AI backend (Django/OpenAI)
-      const res = await axios.post("http://127.0.0.1:8000/api/ai-chat/", {
+      // ✅ Render backend
+      const res = await axios.post(`${API_BASE}/ai-chat/`, {
         message: trimmedInput,
       });
 
-      // assume backend returns plain text reply; mark isHtml=false
       const botReply = res.data.reply || "Hmm... I couldn't find an answer.";
       setMessages((prev) => [
         ...prev,
@@ -74,7 +74,11 @@ const SupportBot = () => {
     } catch (err) {
       setMessages((prev) => [
         ...prev,
-        { role: "bot", content: "⚠️ Error connecting to AI server.", isHtml: false },
+        {
+          role: "bot",
+          content: "⚠️ Error connecting to AI server.",
+          isHtml: false,
+        },
       ]);
     } finally {
       setLoading(false);
@@ -158,11 +162,8 @@ const SupportBot = () => {
                         : "bg-green-200 text-gray-900 rounded-bl-none"
                     }`}
                   >
-                    {/* render HTML only for trusted bot messages */}
                     {msg.role === "bot" && msg.isHtml ? (
-                      <div
-                        dangerouslySetInnerHTML={{ __html: msg.content }}
-                      />
+                      <div dangerouslySetInnerHTML={{ __html: msg.content }} />
                     ) : (
                       <div>{msg.content}</div>
                     )}

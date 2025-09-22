@@ -15,7 +15,8 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const API_BASE = "http://127.0.0.1:8000/api";
+// ✅ Use env variable (fallback to localhost for dev)
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000/api";
 
 // axios instance
 const api = axios.create({

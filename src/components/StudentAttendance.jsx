@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const API_URL = "http://127.0.0.1:8000/api/attendance/";
+// ✅ Use Render backend (update with your real URL)
+const API_URL = import.meta.env.VITE_API_BASE_URL + "/attendance/";
 
 const AttendanceEntry = () => {
   const navigate = useNavigate();
@@ -27,12 +28,19 @@ const AttendanceEntry = () => {
     if (!studentName || !rollNumber) {
       return alert("Enter roll number & student name!");
     }
-    const newEntry = { roll_number: rollNumber, student_name: studentName, year, status, division: selectedDivision, date: todayDate };
+    const newEntry = {
+      roll_number: rollNumber,
+      student_name: studentName,
+      year,
+      status,
+      division: selectedDivision,
+      date: todayDate,
+    };
     const updated = [...entries, newEntry].sort(
       (a, b) => Number(a.roll_number) - Number(b.roll_number)
     );
     setEntries(updated);
-    localStorage.setItem("attendanceEntries", JSON.stringify(updated)); // Save locally
+    localStorage.setItem("attendanceEntries", JSON.stringify(updated));
     setStudentName("");
     setRollNumber("");
     setStatus("Present");
@@ -53,7 +61,7 @@ const AttendanceEntry = () => {
         });
       }
       alert(`✅ Attendance for ${selectedDivision} saved!`);
-      localStorage.removeItem("attendanceEntries"); // Clear local after save
+      localStorage.removeItem("attendanceEntries");
       setEntries([]);
     } catch (err) {
       console.error(err);

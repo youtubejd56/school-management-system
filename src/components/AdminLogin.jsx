@@ -3,6 +3,9 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import Images10 from "../assets/admin1.png";
 
+// ✅ Define API Base URL (change to your Render backend URL)
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000/api";
+
 const AdminLogin = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -13,7 +16,7 @@ const AdminLogin = () => {
     e.preventDefault();
     setError("");
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/admin-login/", {
+      const response = await axios.post(`${API_BASE}/admin-login/`, {
         username,
         password,
       });

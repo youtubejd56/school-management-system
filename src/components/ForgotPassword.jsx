@@ -2,6 +2,9 @@ import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
+// ✅ Define API Base URL
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000/api";
+
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -10,10 +13,10 @@ const ForgotPassword = () => {
     e.preventDefault();
     setMessage("");
     try {
-      await axios.post("http://127.0.0.1:8000/api/admin-forgot-password/", { email });
-      setMessage("Password reset link sent to your email.");
+      await axios.post(`${API_BASE}/admin-forgot-password/`, { email });
+      setMessage("✅ Password reset link sent to your email.");
     } catch (err) {
-      setMessage("Failed to send reset link. Try again.");
+      setMessage("❌ Failed to send reset link. Try again.");
     }
   };
 
